@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adrian Stański</title>
+    <link rel="stylesheet" href="css.css" type="text/css">
+</head>
+<body>
+    <ul>
+        <li><a href="../index.html">Strona główna</a></li>
+        <li><a href="../runner/html.html">Endless Runner</a></li>
+        <li><a href="../flappy duck/html.html">Flappy kiwi</a></li>
+        <li><a class="active" href="../paint/html.html">"Paint"</a></li>
+        <li><a href="../balloon shooter/html.html">Balloon Shooter</a></li>
+        <li><a href="../wonsz/html.html">Wonsz</a></li>
+        <li><a href="../brick break/html.html">Brick Break</a></li>
+      </ul>
+</div>
+    </div>
+    <br>
+    <br></br>
+
+    <canvas width="800" height="800" id="canvas2" style="position:absolute;
+    top:150px;
+    left:8px; border:1px solid #000;"></canvas>
+    <canvas width="800" height="800" id="canvas" style="position:absolute;
+    top:150px;
+    left:8px; border:1px solid #000;"></canvas>
+    
+    
+    <div class="inputy">
+        <input type="color" id="kolorki">
+        <input type="range" id="gr" min="1" max="200" step="1" value="1">
+        <label id="label">1px</label><br>
+        <input type="checkbox" id="gumka"> <label>GUMKA</label><br>
+        <input type="checkbox" id="trojkat"> <label>Trojkąt prostokątny</label><br>
+        <button onclick="reset()">Reset</button>
+    </div>
+    <script src="js.js"></script>
+</body>
+</html>
