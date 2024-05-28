@@ -10,11 +10,20 @@ class Game{
         document.addEventListener("keydown", this.keyDown);
         document.addEventListener("keyup", this.keyUp);
         this.background = new Image();
-        this.background.src = "images/background.png"
+        this.background.src = "images/background.png";
+        this.button = new Image();
+        this.button.src = "images/button.png";
+        this.button.width = 200;
+        this.button.height = 60;
+
+        this.menu = false;
+        this.optionsMenu = false;
+        this.highscoreMenu = false;
+        this.game = true;
+        this.gameOver = false;
 
         this.keyClicked = false;
         this.score = 0;
-
         this.player={
             png: new Image(),
             x: this.canvas.width/2-125,
@@ -22,7 +31,11 @@ class Game{
             where: 1
         };
         this.logs = []
+        this.time = 150;
         setInterval(this.update, 10);
+        setInterval(()=>{
+            console.log(this.time--);
+        }, 100)
     }
 
     drawPlayer=()=>{
@@ -51,8 +64,9 @@ class Game{
     }
     collisionCheck=()=>{
         if(this.player.where == this.logs[0].branch || this.player.where == this.logs[1].branch){
-            alert("Koniec gry, punktów: "+ this.score);
-            this.score = 0;
+            this.game = false;
+            this.gameOver = true;
+            this.checkHighscore();
             this.logs = [];
             this.player.where = 1;
         }
@@ -86,17 +100,106 @@ class Game{
     update=()=>{
         this.clearCanvas();
         this.drawBackground();
+
+        if(this.game){
+            this.drawGame();
+        }
+        else if(this.gameOver){
+            this.drawGameOverPanel();
+        }
+        else if(this.menu){
+            this.drawMainMenu();
+        }
+        else if (this.highscoreMenu){
+            this.drawHighscoreMenu();
+        }
+        else if(this.optionsMenu){
+            this.drawOptionsMenu();
+        }
+
+
+    }
+    drawGame=()=>{
         this.generateWood();
         this.woodFall();
         this.drawWood();
         this.drawPlayer();
         this.drawText();
     }
+    drawGameOverPanel=()=>{
+        this.canvas.addEventListener("mousedown", this.playAgain);
+
+        this.ctx.fillStyle = "grey";
+        this.ctx.fillRect(150,200, 300, 400);
+
+
+        this.ctx.font = "40px Arial"
+        this.ctx.fillStyle = "black";
+        this.ctx.fillText("GAME OVER", this.canvas.width/2-this.ctx.measureText("GAME OVER").width/2, 275);
+        this.ctx.font = "20px Arial"
+        this.ctx.fillText("Score: "+this.score, this.canvas.width/2-this.ctx.measureText("Score: "+this.score).width/2, 325);
+        this.ctx.fillText("Highscore: "+this.getHighscore(), this.canvas.width/2-this.ctx.measureText("Highscore: "+this.getHighscore()).width/2, 350);
+        if(this.newHighscore){
+            this.ctx.fillText("NEW HIGHSCORE: "+this.getHighscore(), this.canvas.width/2-this.ctx.measureText("NEW HIGHSCORE: "+this.getHighscore()).width/2, 385);
+        }
+
+        this.ctx.fillStyle = "white";
+        this.ctx.drawImage(this.button, 200, 400, this.button.width, this.button.height);
+        this.ctx.fillText("Zagraj ponownie", this.canvas.width/2-this.ctx.measureText("Zagraj ponownie").width/2, 435);
+        this.ctx.drawImage(this.button, 200, 500, this.button.width, this.button.height);
+        this.ctx.fillText("Menu (work in progress", this.canvas.width/2-this.ctx.measureText("Menu (work in progress").width/2, 535);
+    }
+    drawMainMenu=()=>{
+
+    }
+    drawHighscoreMenu=()=>{
+
+    }
+    drawOptionsMenu=()=>{
+
+    }
 
     drawBackground = ()=>{
         this.ctx.drawImage(this.background, 0, 0, 800, 800);
     }
 
+    playAgain=(e)=>{
+        if(this.checkIfMousePositionIsInThisButton(e.offsetX, e.offsetY, 200, 400)){
+            this.newHighscore = false;
+            this.gameOver = false;
+            this.game = true;
+            this.canvas.removeEventListener("mousedown", this.playAgain);
+            this.score = 0;
+        }
+    }
+
+    checkIfMousePositionIsInThisButton=(mousePosX, mousePosY, buttonX, buttonY)=>{
+        if(mousePosX>=buttonX && mousePosX<=buttonX+this.button.width &&
+            mousePosY>=buttonY && mousePosY<=buttonY+this.button.height
+        ){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    getHighscore=()=>{
+        this.highscore = localStorage.getItem('treescore');
+        if(this.highscore){
+            return parseInt(this.highscore);
+        }
+        else{
+            return 0;
+        }
+    }
+    checkHighscore=()=>{
+        if(this.getHighscore()<this.score){
+            localStorage.setItem('treescore', this.score);
+            this.newHighscore = true;
+        }
+
+    }
 
     generateWood=()=>{
         if(this.logs.length<20){
@@ -157,6 +260,7 @@ class Game{
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
     drawText=()=>{
+        this.ctx.fillStyle = "black";
         this.ctx.font = "30px Arial";
         this.ctx.shadowBlur=7;
         this.ctx.font = "20px Arial";
