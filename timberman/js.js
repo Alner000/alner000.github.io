@@ -9,6 +9,8 @@ class Game{
         this.ctx = this.canvas.getContext('2d');
         document.addEventListener("keydown", this.keyDown);
         document.addEventListener("keyup", this.keyUp);
+        this.logo = new Image();
+        this.logo.src = "images/logo.png";
         this.background = new Image();
         this.background.src = "images/background.png";
         this.button = new Image();
@@ -129,25 +131,27 @@ class Game{
     drawGameOverPanel=()=>{
         this.canvas.addEventListener("mousedown", this.playAgain);
 
+        this.ctx.drawImage(this.logo, this.canvas.width/2-150, 20, 300, 300);
+
         this.ctx.fillStyle = "grey";
-        this.ctx.fillRect(150,200, 300, 400);
+        this.ctx.fillRect(150,300, 300, 400);
 
 
         this.ctx.font = "40px Arial"
         this.ctx.fillStyle = "black";
-        this.ctx.fillText("GAME OVER", this.canvas.width/2-this.ctx.measureText("GAME OVER").width/2, 275);
+        this.ctx.fillText("GAME OVER", this.canvas.width/2-this.ctx.measureText("GAME OVER").width/2, 375);
         this.ctx.font = "20px Arial"
-        this.ctx.fillText("Score: "+this.score, this.canvas.width/2-this.ctx.measureText("Score: "+this.score).width/2, 325);
-        this.ctx.fillText("Highscore: "+this.getHighscore(), this.canvas.width/2-this.ctx.measureText("Highscore: "+this.getHighscore()).width/2, 350);
+        this.ctx.fillText("Score: "+this.score, this.canvas.width/2-this.ctx.measureText("Score: "+this.score).width/2, 425);
+        this.ctx.fillText("Highscore: "+this.getHighscore(), this.canvas.width/2-this.ctx.measureText("Highscore: "+this.getHighscore()).width/2, 450);
         if(this.newHighscore){
-            this.ctx.fillText("NEW HIGHSCORE: "+this.getHighscore(), this.canvas.width/2-this.ctx.measureText("NEW HIGHSCORE: "+this.getHighscore()).width/2, 385);
+            this.ctx.fillText("NEW HIGHSCORE: "+this.getHighscore(), this.canvas.width/2-this.ctx.measureText("NEW HIGHSCORE: "+this.getHighscore()).width/2, 485);
         }
 
         this.ctx.fillStyle = "white";
-        this.ctx.drawImage(this.button, 200, 400, this.button.width, this.button.height);
-        this.ctx.fillText("Zagraj ponownie", this.canvas.width/2-this.ctx.measureText("Zagraj ponownie").width/2, 435);
         this.ctx.drawImage(this.button, 200, 500, this.button.width, this.button.height);
-        this.ctx.fillText("Menu (work in progress", this.canvas.width/2-this.ctx.measureText("Menu (work in progress").width/2, 535);
+        this.ctx.fillText("Zagraj ponownie", this.canvas.width/2-this.ctx.measureText("Zagraj ponownie").width/2, 535);
+        this.ctx.drawImage(this.button, 200, 600, this.button.width, this.button.height);
+        this.ctx.fillText("Menu (work in progress", this.canvas.width/2-this.ctx.measureText("Menu (work in progress").width/2, 635);
     }
     drawMainMenu=()=>{
 
@@ -164,7 +168,7 @@ class Game{
     }
 
     playAgain=(e)=>{
-        if(this.checkIfMousePositionIsInThisButton(e.offsetX, e.offsetY, 200, 400)){
+        if(this.checkIfMousePositionIsInThisButton(e.offsetX, e.offsetY, 200, 500)){
             this.newHighscore = false;
             this.gameOver = false;
             this.game = true;
