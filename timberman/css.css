@@ -1,0 +1,20 @@
+html, body {
+    height: 95%;
+}
+
+html {
+    display: table;
+    margin: auto;
+}
+
+body {
+    display: table-cell;
+    vertical-align: middle;
+    background-color: #28190E;
+    color:white;
+}
+#canvas{
+    width: 100%;
+    background-color: white;
+    border: solid #5c3921;
+}
