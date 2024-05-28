@@ -53,6 +53,8 @@ class Game{
         if(this.player.where == this.logs[0].branch || this.player.where == this.logs[1].branch){
             alert("Koniec gry, punktów: "+ this.score);
             this.score = 0;
+            this.logs = [];
+            this.player.where = 1;
         }
         else{
             this.score++;
