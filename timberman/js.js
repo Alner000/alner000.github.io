@@ -78,7 +78,7 @@ class Game{
     }
 
     keyDown=(e)=>{
-        if(!this.keyClicked){
+        if(!this.keyClicked && this.game){
             if(e.code=="KeyA" || e.code=="ArrowLeft"){
                 this.keyClicked = true;
                 this.player.where = 1;
@@ -112,9 +112,6 @@ class Game{
         else if(this.menu){
             this.drawMainMenu();
         }
-        else if (this.highscoreMenu){
-            this.drawHighscoreMenu();
-        }
         else if(this.optionsMenu){
             this.drawOptionsMenu();
         }
@@ -126,20 +123,46 @@ class Game{
         this.woodFall();
         this.drawWood();
         this.drawPlayer();
-        this.drawText();
+        this.drawScore();
     }
     drawGameOverPanel=()=>{
+        this.drawLogo();
+        this.drawGameOverTextAndButtons()
+        this.drawMenuButton();
+    }
+    drawMainMenu=()=>{
+
+    }
+    drawOptionsMenu=()=>{
+
+    }
+
+    drawMenuButton=()=>{
+        this.ctx.fillStyle = "white";
+        this.ctx.drawImage(this.button, 200, 600, this.button.width, this.button.height);
+        this.ctx.fillText("Menu (work in progress", this.canvas.width/2-this.ctx.measureText("Menu (work in progress").width/2, 635);
+    }
+
+    drawLogo=()=>{
+        this.ctx.drawImage(this.logo, this.canvas.width/2-150, 20, 300, 300);
+    }
+    drawBackground = ()=>{
+        this.ctx.drawImage(this.background, 0, 0, 800, 800);
+    }
+    drawGameOverTextAndButtons=()=>{
+        //dodanie funkcjonalnosci przycisku
         this.canvas.addEventListener("mousedown", this.playAgain);
 
-        this.ctx.drawImage(this.logo, this.canvas.width/2-150, 20, 300, 300);
-
+        //wyrysowanie tla dla panelu
         this.ctx.fillStyle = "grey";
         this.ctx.fillRect(150,300, 300, 400);
-
-
+        
+        //wypisanie tekstu game over
         this.ctx.font = "40px Arial"
         this.ctx.fillStyle = "black";
         this.ctx.fillText("GAME OVER", this.canvas.width/2-this.ctx.measureText("GAME OVER").width/2, 375);
+
+        //wypisanie punktow i highscora
         this.ctx.font = "20px Arial"
         this.ctx.fillText("Score: "+this.score, this.canvas.width/2-this.ctx.measureText("Score: "+this.score).width/2, 425);
         this.ctx.fillText("Highscore: "+this.getHighscore(), this.canvas.width/2-this.ctx.measureText("Highscore: "+this.getHighscore()).width/2, 450);
@@ -147,24 +170,10 @@ class Game{
             this.ctx.fillText("NEW HIGHSCORE: "+this.getHighscore(), this.canvas.width/2-this.ctx.measureText("NEW HIGHSCORE: "+this.getHighscore()).width/2, 485);
         }
 
+        //narysowanie przycisku zagraj ponownie
         this.ctx.fillStyle = "white";
         this.ctx.drawImage(this.button, 200, 500, this.button.width, this.button.height);
         this.ctx.fillText("Zagraj ponownie", this.canvas.width/2-this.ctx.measureText("Zagraj ponownie").width/2, 535);
-        this.ctx.drawImage(this.button, 200, 600, this.button.width, this.button.height);
-        this.ctx.fillText("Menu (work in progress", this.canvas.width/2-this.ctx.measureText("Menu (work in progress").width/2, 635);
-    }
-    drawMainMenu=()=>{
-
-    }
-    drawHighscoreMenu=()=>{
-
-    }
-    drawOptionsMenu=()=>{
-
-    }
-
-    drawBackground = ()=>{
-        this.ctx.drawImage(this.background, 0, 0, 800, 800);
     }
 
     playAgain=(e)=>{
@@ -263,7 +272,7 @@ class Game{
     clearCanvas=()=>{
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
-    drawText=()=>{
+    drawScore=()=>{
         this.ctx.fillStyle = "black";
         this.ctx.font = "30px Arial";
         this.ctx.shadowBlur=7;
@@ -275,3 +284,43 @@ class Game{
 }
 
 const game = new Game();
+
+
+/*do zrobienia
+
+w grze(
+    pasek czasu,
+    przyspiesza z kazdym 20 klocami
+    (czas spada co 0.1 sekundy spada 1 z 150(15 sekund) max 15 sekund)
+    z kazdym score spada o 0.01 szybciej
+    drzewo daje 5 - do ustalenia
+    jak spadnie do 0 game over
+)
+
+game over(
+    dodac przycisk menu
+)
+
+
+przycisk menu
+
+menu(
+    logo,
+    przycisk graj,
+    przycisk opcje(
+        zmiana glosnosci muzyki,
+        zmiana glosnosci dzwiekow,
+        przycisk menu
+    ),
+    przycisk bibliografia{
+        wypisane kto co skad
+    },
+)
+
+dzwieki(
+    muzka, soundtrack jakas chillera,
+    dzwieki - gryzienia drewna, klikania w przycisk
+)
+
+
+*/
