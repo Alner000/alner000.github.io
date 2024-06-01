@@ -28,6 +28,24 @@ class Game{
         this.selected.src = "images/selected.png";
         this.timeBar = new Image();
         this.timeBar.src = "images/timer.png";
+
+        this.music = new Audio();
+        this.music.src = "sounds/music.wav";
+        this.music.volume = 0.3;
+        this.gameOverSound = new Audio();
+        this.gameOverSound.src = "sounds/gamelost.wav";
+        this.gameWonSound = new Audio();
+        this.gameWonSound.src = "sounds/gamewon.wav";
+    }
+    biteSound=()=>{
+        var bite = new Audio();
+        bite.src="sounds/bite.wav";
+        bite.play();
+    }
+    btnSound=()=>{
+        var btnSound = new Audio();
+        btnSound.src="sounds/button.wav";
+        btnSound.play();
     }
     firstGameStart=()=>{
         document.addEventListener("keydown", this.keyDown);
@@ -81,6 +99,7 @@ class Game{
             }
             this.logs = [];
             this.player.where = 1;
+            this.gameOverSound.play();
         }
         else{
             this.score++;
@@ -89,6 +108,7 @@ class Game{
     checkForEnd=()=>{
         if(this.woodLeft<=0){
             this.changeScene("gameWon");
+            this.gameWonSound.play();
             this.checkHighscore();
             this.logs = [];
             this.player.where = 1;
@@ -96,6 +116,7 @@ class Game{
         }
         if(this.timeLeft<=0){
             this.changeScene("gameOver");
+            this.gameOverSound.play();
             this.checkHighscore();
             this.logs = [];
             this.player.where = 1;
@@ -106,6 +127,7 @@ class Game{
     keyDown=(e)=>{
         if(!this.keyClicked && this.game){
             this.keyClicked = true;
+            this.biteSound();
             if(e.code=="KeyA" || e.code=="ArrowLeft"){
                 this.player.where = 1;
             }
@@ -131,6 +153,7 @@ class Game{
     update=()=>{
         this.clearCanvas();
         this.drawBackground();
+        this.music.play();
         if(this.game){
             this.drawGame();
         }
@@ -286,7 +309,7 @@ class Game{
         //wypisanie punktow i highscora
         if(this.endless){
             this.ctx.font = "20px Arial"
-            this.ctx.fillText("Score: "+this.score, this.canvas.width/2-this.ctx.measureText("Score: "+this.score).width/2, 425);
+            this.ctx.fillText("Punktów: "+this.score, this.canvas.width/2-this.ctx.measureText("Punktów: "+this.score).width/2, 425);
             this.ctx.fillText("Highscore: "+this.getHighscore(), this.canvas.width/2-this.ctx.measureText("Highscore: "+this.getHighscore()).width/2, 450);
             if(this.newHighscore){
                 this.ctx.fillText("NEW HIGHSCORE: "+this.getHighscore(), this.canvas.width/2-this.ctx.measureText("NEW HIGHSCORE: "+this.getHighscore()).width/2, 485);
@@ -305,9 +328,10 @@ class Game{
         this.ctx.fillText("GAME WON", this.canvas.width/2-this.ctx.measureText("GAME WON").width/2, 375);
 
         this.ctx.font = "18px Arial"
-        this.ctx.fillText("Najszybszy czas: "+this.getHighscore()/100+" sekund", this.canvas.width/2-this.ctx.measureText("Najszybszy czas: "+this.getHighscore()/100+" sekund").width/2, 425);
+        this.ctx.fillText("Twój czas: "+this.time/100+" sekund", this.canvas.width/2-this.ctx.measureText("Twój czas: "+this.time/100+" sekund").width/2, 425);
+        this.ctx.fillText("Rekord: "+this.getHighscore()/100+" sekund", this.canvas.width/2-this.ctx.measureText("Rekord: "+this.getHighscore()/100+" sekund").width/2, 450);
         if(this.newHighscore){
-            this.ctx.fillText("NOWY REKORD: "+this.getHighscore()/100+" sekund", this.canvas.width/2-this.ctx.measureText("NOWY REKORD: "+this.getHighscore()/100+" sekund").width/2, 460);
+            this.ctx.fillText("NOWY REKORD: "+this.getHighscore()/100+" sekund", this.canvas.width/2-this.ctx.measureText("NOWY REKORD: "+this.getHighscore()/100+" sekund").width/2, 485);
         }
     }
     drawInformationPanel=()=>{
@@ -316,17 +340,20 @@ class Game{
     }
     howToPlay=(e)=>{
         if(this.checkIfMousePositionIsInThisButton(e.offsetX, e.offsetY, 200, 600) && this.menu){
+            this.canvas.removeEventListener("mousedown", this.howToPlay);
             this.changeScene("howToPlayMenu");
         }
     }
     levelsMeaning=(e)=>{
         if(this.checkIfMousePositionIsInThisButton(e.offsetX, e.offsetY, 200, 300) && this.menu){
+            this.canvas.removeEventListener("mousedown", this.levelsMeaning);
             this.changeScene("levelsMeaningMenu");
         }
     }
 
     levelSelectEndless=(e)=>{
         if(this.checkIfMousePositionIsInThisButton(e.offsetX, e.offsetY, 90, 400) && this.menu){
+
             this.endless = true;
             this.classic = false;
         }
@@ -390,6 +417,7 @@ class Game{
         if(mousePosX>=buttonX && mousePosX<=buttonX+this.button.width &&
             mousePosY>=buttonY && mousePosY<=buttonY+this.button.height
         ){
+            this.btnSound();
             return true;
         }
         else{
@@ -512,15 +540,8 @@ const game = new Game();
 
 /*do zrobienia
 
-
-menu(
-    how to play
-)
-
 dzwieki(
     muzka, soundtrack jakas chillera,
     dzwieki - gryzienia drewna, klikania w przycisk
 )
-
-
 */
