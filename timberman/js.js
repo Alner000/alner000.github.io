@@ -30,7 +30,7 @@ class Game{
         this.logo = new Image();
         this.logo.src = "images/logo.png";
         this.background = new Image();
-        this.background.src = "images/background.png";
+        this.background.src = "images/background4.png";
         this.button = new Image();
         this.button.src = "images/button.png";
         this.button.width = 200;
@@ -345,7 +345,7 @@ class Game{
     }
     //narysowanie obrazka tła
     drawBackground = ()=>{
-        this.ctx.drawImage(this.background, 0, 0, 800, 800);
+        this.ctx.drawImage(this.background,0, 0, 600, 800);
     }
     /*
     nazwa funckji: <drawGameOverText>
